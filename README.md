@@ -15,7 +15,7 @@ A repository for my future dotnet projects to assist me in configuration.
     - When it finishes: 
         - `dotnet ef database update --startup-project ./../API;`
 - Return to the projects root folder:
-    - `cd ..`
+    - `cd ./../..`
 - Run the npm "watch" dev script:
     - `npm run watch`
 
