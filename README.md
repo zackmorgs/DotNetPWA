@@ -2,7 +2,7 @@
 A repository for my future dotnet projects to assist me in configuration.
 
 ## Basic Useage
-- Install dotnet 9 via [offical server](https://dotnet.microsoft.com/en-us/download). 
+- Install dotnet 9 via [official source](https://dotnet.microsoft.com/en-us/download). 
 - Install node/npm via [official source](https://nodejs.org/en).
 - Open a terminal in a folder of your choosing.
 - `git clone https://github.com/zackmorgs/DotNetPWA.git`
