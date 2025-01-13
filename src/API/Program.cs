@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore.Design;
 
 using Data;
 using Models;
@@ -9,11 +10,9 @@ using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
 // Add services to the container.
 builder.Services.AddDbContext<Db>(options =>
-    options.UseSqlite(connectionString));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddTransient<WeatherForecastService>();
 
@@ -53,10 +52,20 @@ app.MapGet("/weatherforecast", async () =>
 .WithName("GetWeatherForecast");
 
 app.MapPut("/weatherforecast", async (WeatherForecast forecast) => {
-    var weatherService = app.Services.GetRequiredService<WeatherForecastService>();
-    await weatherService.AddWeatherForecast(forecast);
+    try
+    {
+        var weatherService = app.Services.GetRequiredService<WeatherForecastService>();
+        await weatherService.AddWeatherForecast(forecast);
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex);
+    } 
+    finally
+    {
+        Console.WriteLine("/weatherforecast put resolved.");
+    }
     return Results.Ok();
-
 }).WithName("AddWeatherForecast");
 
 

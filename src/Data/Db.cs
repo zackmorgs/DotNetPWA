@@ -8,10 +8,7 @@ namespace Data
 {
     public class Db : IdentityDbContext<ApplicationUser>
     {
-        public Db(DbContextOptions<Db> options) : base(options)
-        {
-            // WeatherForecasts will be initialized by Entity Framework
-        }
+        public Db(DbContextOptions<Db> options) : base(options) { }
 
         public DbSet<WeatherForecast> WeatherForecasts { get; set; }
     }

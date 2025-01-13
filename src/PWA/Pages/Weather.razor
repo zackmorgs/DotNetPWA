@@ -1,15 +1,25 @@
-﻿@page "/weather"
+﻿
+
+@page "/weather"
 @inject HttpClient Http
 
 <PageTitle>Weather</PageTitle>
 
 <h1>Weather</h1>
 
-<p>This component demonstrates fetching data from the server.</p>
+<p>This component demonstrates adding, fetching data from the server.</p>
+
+<input type="number" @bind-value="myTemp"/>
+<input type="text" @bind-value="mySummary" />
+<input type="date" @bind-value="myDate" />
+
+<button @onclick="AddWeatherForecast">
+    Add Weather Forecast
+</button>
 
 @if (forecasts == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>No Forecasts Exist.</em></p>
 }
 else
 {
@@ -39,6 +49,11 @@ else
 @code {
     private WeatherForecast[]? forecasts;
 
+    public DateOnly myDate { get; set; }
+
+    public int myTemp { get; set; } = 65;
+    public string mySummary { get; set; } = "Warm";
+
     protected override async Task OnInitializedAsync()
     {
         forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("https://localhost:7092/weatherforecast?GetWeatherForecast");
@@ -48,11 +63,13 @@ else
     {
         WeatherForecast myWeatherForecast = new WeatherForecast
         {
-            Date = new DateOnly(2021, 12, 31),
-            TemperatureC = 25,
-            Summary = "Freezing"
+            Date = myDate,
+            TemperatureC = myTemp,
+            Summary = mySummary
         };
-        
+
+        await Http.PostAsJsonAsync("https://localhost:7092//weatherforecast?AddWeatherForecast", myWeatherForecast); // Use POST instead of PUT
+
     }
 
     public class WeatherForecast
