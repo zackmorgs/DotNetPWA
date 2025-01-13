@@ -1,0 +1,35 @@
+﻿<div class="bg-gray-800 text-white">
+    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+        <a class="text-xl font-bold" href="#">PWA</a>
+        <button 
+            class="text-white focus:outline-none lg:hidden" 
+            @onclick="ToggleNavMenu">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+    </div>
+
+    <div class="lg:flex lg:items-center lg:justify-between">
+        <nav class="bg-gray-700 lg:bg-transparent px-4 py-2 lg:px-0 lg:flex lg:space-x-6">
+            <NavLink class="block py-2 lg:inline-block lg:py-0 text-white hover:text-gray-400" href="" Match="NavLinkMatch.All">
+                <span class="inline-block mr-2 bi bi-house-door-fill"></span> Home
+            </NavLink>
+            <NavLink class="block py-2 lg:inline-block lg:py-0 text-white hover:text-gray-400" href="counter">
+                <span class="inline-block mr-2 bi bi-plus-square-fill"></span> Counter
+            </NavLink>
+            <NavLink class="block py-2 lg:inline-block lg:py-0 text-white hover:text-gray-400" href="weather">
+                <span class="inline-block mr-2 bi bi-list-nested"></span> Weather
+            </NavLink>
+        </nav>
+    </div>
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
