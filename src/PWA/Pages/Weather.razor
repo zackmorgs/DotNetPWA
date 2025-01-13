@@ -44,6 +44,17 @@ else
         forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("https://localhost:7092/weatherforecast?GetWeatherForecast");
     }
 
+    public async Task AddWeatherForecast()
+    {
+        WeatherForecast myWeatherForecast = new WeatherForecast
+        {
+            Date = new DateOnly(2021, 12, 31),
+            TemperatureC = 25,
+            Summary = "Freezing"
+        };
+        
+    }
+
     public class WeatherForecast
     {
         public DateOnly Date { get; set; }
