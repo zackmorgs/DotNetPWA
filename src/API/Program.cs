@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore.Design;
 
 using Data;
 using Models;
@@ -10,67 +9,70 @@ using Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Connection String
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 // Add services to the container.
 builder.Services.AddDbContext<Db>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(connectionString));
 
-builder.Services.AddTransient<WeatherForecastService>();
+// Identity configuration
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.SignIn.RequireConfirmedAccount = false;
+})
+.AddEntityFrameworkStores<Db>()
+.AddDefaultTokenProviders();
 
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// Register custom services
+builder.Services.AddScoped<WeatherForecastService>();
 
-builder.Services.AddCors(
-    options => options.AddPolicy(
-        "API",
-        policy => policy.WithOrigins(builder.Configuration["FrontendUrl"] ?? "http://localhost:5225")
-            .AllowAnyMethod()
-            .AllowAnyHeader()));
+// OpenAPI (Swagger)
+builder.Services.AddEndpointsApiExplorer();
+//builder.Services.AddSwaggerGen();
 
+// CORS policy
+builder.Services.AddCors(options =>
+    options.AddPolicy("API", policy =>
+        policy.WithOrigins(builder.Configuration["FrontendUrl"] ?? "http://localhost:5225")
+              .AllowAnyMethod()
+              .AllowAnyHeader()));
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure middleware
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    //app.UseSwagger();
+    //app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+app.UseCors("API");
 
-var summaries = new[]
+// Endpoints
+app.MapGet("/weatherforecast", async (WeatherForecastService weatherService) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", async () =>
-{
-    // use the WeatherService to retrieve the weather forecast
-    var weatherService = app.Services.GetRequiredService<WeatherForecastService>();
     var forecasts = await weatherService.GetWeatherForecast();
     return forecasts;
 })
 .WithName("GetWeatherForecast");
 
-app.MapPut("/weatherforecast", async (WeatherForecast forecast) => {
+app.MapPut("/weatherforecast", async (WeatherForecast forecast, WeatherForecastService weatherService) =>
+{
     try
     {
-        var weatherService = app.Services.GetRequiredService<WeatherForecastService>();
         await weatherService.AddWeatherForecast(forecast);
+        return Results.Ok("Weather forecast added successfully.");
     }
     catch (Exception ex)
     {
         Console.WriteLine(ex);
-    } 
-    finally
-    {
-        Console.WriteLine("/weatherforecast put resolved.");
+        return Results.Problem("An error occurred while adding the weather forecast.");
     }
-    return Results.Ok();
-}).WithName("AddWeatherForecast");
+})
+.WithName("AddWeatherForecast");
 
-
-// Activate the CORS policy
-app.UseCors("API");
-
+// Run the application
 app.Run();
-
