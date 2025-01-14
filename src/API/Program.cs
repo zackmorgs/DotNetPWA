@@ -59,7 +59,8 @@ app.MapGet("/weatherforecast", async (WeatherForecastService weatherService) =>
 })
 .WithName("GetWeatherForecast");
 
-app.MapPut("/weatherforecast", async (WeatherForecast forecast, WeatherForecastService weatherService) =>
+
+app.MapPost("/weatherforecast", async (WeatherForecast forecast, WeatherForecastService weatherService) =>
 {
     try
     {

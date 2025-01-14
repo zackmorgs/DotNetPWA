@@ -1,4 +1,4 @@
-﻿
+﻿@using Models;
 
 @page "/weather"
 @inject HttpClient Http
@@ -7,13 +7,16 @@
 
 <h1>Weather</h1>
 
-<p>This component demonstrates adding, fetching data from the server.</p>
+<section>
+    <div class="container mx-auto">
+        <p>This component demonstrates adding, fetching data from the server.</p>
+        <input type="number" @bind="myTemp" />
+        <input type="text" @bind="mySummary" />
+        <input type="date" @bind="myDateTime" />
+    </div>
+</section>
 
-<input type="number" @bind-value="myTemp"/>
-<input type="text" @bind-value="mySummary" />
-<input type="date" @bind-value="myDate" />
-
-<button @onclick="AddWeatherForecast">
+<button @onclick="AddWeatherForecast" class="btn">
     Add Weather Forecast
 </button>
 
@@ -36,7 +39,7 @@ else
             @foreach (var forecast in forecasts)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
+                    <td>@forecast.DateTime.ToShortDateString()</td>
                     <td>@forecast.TemperatureC</td>
                     <td>@forecast.TemperatureF</td>
                     <td>@forecast.Summary</td>
@@ -49,7 +52,7 @@ else
 @code {
     private WeatherForecast[]? forecasts;
 
-    public DateOnly myDate { get; set; }
+    public DateTime myDateTime { get; set; }
 
     public int myTemp { get; set; } = 65;
     public string mySummary { get; set; } = "Warm";
@@ -61,25 +64,8 @@ else
 
     public async Task AddWeatherForecast()
     {
-        WeatherForecast myWeatherForecast = new WeatherForecast
-        {
-            Date = myDate,
-            TemperatureC = myTemp,
-            Summary = mySummary
-        };
+        WeatherForecast myWeatherForecast = new WeatherForecast() { DateTime = myDateTime, TemperatureC = myTemp, Summary = mySummary };
 
-        await Http.PostAsJsonAsync("https://localhost:7092//weatherforecast?AddWeatherForecast", myWeatherForecast); // Use POST instead of PUT
-
-    }
-
-    public class WeatherForecast
-    {
-        public DateOnly Date { get; set; }
-
-        public int TemperatureC { get; set; }
-
-        public string? Summary { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        await Http.PostAsJsonAsync("https://localhost:7092/weatherforecast?AddWeatherForecast", myWeatherForecast);
     }
 }
