@@ -1,12 +1,19 @@
-﻿@using Models;
+﻿@using Models
 @page "/weather"
 @inject HttpClient Http
+@inject IIndexedDbService IndexedDb
+@inject IJSRuntime JSRuntime
 
 <PageTitle>Weather</PageTitle>
 
 <div class="bg-gray-50 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Weather</h1>
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Weather</h1>
+            <div class="text-sm text-gray-500">
+                <b>Status:</b> @(IsOnline ? "Online" : "Offline")
+            </div>
+        </div>
 
         <section class="bg-white rounded-lg shadow-sm p-6 mb-8">
             <div class="space-y-4">
@@ -14,11 +21,11 @@
 
                 <div class="flex flex-col sm:flex-row gap-4">
                     <input type="number"
-                           @bind="myTemp"
-                           class="px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                    @bind="myTemp"
+                    class="px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
 
                     <select @bind="mySummary"
-                            class="px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    class="px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         @foreach (var summary in Summaries)
                         {
                             <option value="@summary">@summary</option>
@@ -26,16 +33,32 @@
                     </select>
 
                     <input type="date"
-                           @bind="myDateTime"
-                           class="px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                    @bind="myDateTime"
+                    class="px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
 
                     <button @onclick="AddWeatherForecast"
-                            class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
+                    class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors">
                         Add Weather Forecast
                     </button>
                 </div>
             </div>
         </section>
+
+        @if (errorMessage != null)
+        {
+            <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-8">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-red-700">@errorMessage</p>
+                    </div>
+                </div>
+            </div>
+        }
 
         @if (forecasts == null)
         {
@@ -74,25 +97,117 @@
 
 @code {
     private WeatherForecast[]? forecasts;
-    public DateTime myDateTime { get; set; }
+    private string? errorMessage;
+    public static bool IsOnline = true;
+    public DateTime myDateTime { get; set; } = DateTime.Today;
     public int myTemp { get; set; } = 65;
     public string mySummary { get; set; } = "Warm";
     public List<string> Summaries = new List<string> { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
 
     protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name);
+
+        // Initialize IndexedDB
+        await JSRuntime.InvokeVoidAsync("initializeIndexedDb");
+
+        // Set up online/offline detection
+        await JSRuntime.InvokeVoidAsync("eval", @"
+            window.addEventListener('online', () => {
+                DotNet.invokeMethodAsync('YourAppNamespace', 'OnOnlineStatusChanged', true);
+            });
+            window.addEventListener('offline', () => {
+                DotNet.invokeMethodAsync('YourAppNamespace', 'OnOnlineStatusChanged', false);
+            });
+        ");
+
         await GetForecasts();
+    }
+
+    [JSInvokable]
+    public static Task OnOnlineStatusChanged(bool isOnline)
+    {
+        // Update the online status
+        IsOnline = isOnline;
+        return Task.CompletedTask;
     }
 
     public async Task GetForecasts()
     {
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("https://localhost:7092/weatherforecast?GetWeatherForecast");
+        try
+        {
+            if (IsOnline)
+            {
+                // Try to fetch from API
+                forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("https://localhost:7092/weatherforecast?GetWeatherForecast");
+                if (forecasts != null)
+                {
+                    // Save to IndexedDB for offline use
+                    await IndexedDb.SaveForecasts(forecasts);
+                }
+            }
+            else
+            {
+                // Load from IndexedDB when offline
+                var offlineForecasts = await IndexedDb.GetForecasts();
+                forecasts = offlineForecasts.ToArray();
+            }
+            errorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Failed to fetch data. Loading offline data...";
+            // Load from IndexedDB as fallback
+            var offlineForecasts = await IndexedDb.GetForecasts();
+            forecasts = offlineForecasts.ToArray();
+        }
     }
 
     public async Task AddWeatherForecast()
     {
-        WeatherForecast myWeatherForecast = new WeatherForecast() { DateTime = myDateTime, TemperatureC = myTemp, Summary = mySummary };
-        await Http.PostAsJsonAsync("https://localhost:7092/weatherforecast?AddWeatherForecast", myWeatherForecast);
-        await GetForecasts();
+        try
+        {
+            WeatherForecast newForecast = new WeatherForecast 
+            { 
+                DateTime = myDateTime, 
+                TemperatureC = myTemp, 
+                Summary = mySummary 
+            };
+
+            if (IsOnline)
+            {
+                // Try to save to API
+                await Http.PostAsJsonAsync("https://localhost:7092/weatherforecast?AddWeatherForecast", newForecast);
+                await GetForecasts();
+            }
+            else
+            {
+                // Save locally when offline
+                await IndexedDb.AddForecast(newForecast);
+                var offlineForecasts = await IndexedDb.GetForecasts();
+                forecasts = offlineForecasts.ToArray();
+            }
+            errorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            WeatherForecast newForecast = new WeatherForecast
+                {
+                    DateTime = myDateTime,
+                    TemperatureC = myTemp,
+                    Summary = mySummary
+                };
+            await StoreToIndexedDb(newForecast);
+        }
+    }
+
+    public async Task StoreToIndexedDb(WeatherForecast newForecast)
+    {
+        
+        errorMessage = "Failed to add forecast. Data will be saved locally.";
+        // Save to IndexedDB as fallback
+        await IndexedDb.AddForecast(newForecast);
+        var offlineForecasts = await IndexedDb.GetForecasts();
+        forecasts = offlineForecasts.ToArray();
     }
 }
