@@ -117,18 +117,38 @@
         await JSRuntime.InvokeVoidAsync("initializeIndexedDb");
 
         await GetForecasts();
-        
+
         StateHasChanged();
     }
 
     [JSInvokable]
-    public static void OnOnlineStatusChanged(bool isOnline)
+    public async static void isOnlineStatusChanged()
     {
-        Console.WriteLine("OnOnlineStatusChanged");
+        Console.WriteLine("isOnlineStatusChanged");
         // Update the online status
-        IsOnline = isOnline;
+        IsOnline = true;
+
+        // take localdb -> update mssqldb
     }
 
+    [JSInvokable]
+    public async static void isNotOnlineStatusChanged()
+    {
+        Console.WriteLine("isNotOnlineStatusChanged");
+        // Update the online status
+        IsOnline = false;
+
+        // take localdb -> update mssqldb
+    }
+
+    [JSInvokable]
+    public static async void UpdateSQLDb()
+    {
+        Console.WriteLine("UpdateSQLDb");
+        //var localForecasts = IndexedDb.GetForecasts();
+
+        //var currentForecasts = Http.GetFromJsonAsync<WeatherForecast[]>("https://localhost:7092/weatherforecast?GetWeatherForecast");
+    }
 
     public async Task GetForecasts()
     {
@@ -201,11 +221,12 @@
 
     public async Task StoreToIndexedDb(WeatherForecast newForecast)
     {
-        
         errorMessage = "Failed to add forecast. Data will be saved locally.";
         // Save to IndexedDB as fallback
         await IndexedDb.AddForecast(newForecast);
         var offlineForecasts = await IndexedDb.GetForecasts();
         forecasts = offlineForecasts.ToArray();
+
+        StateHasChanged();
     }
 }

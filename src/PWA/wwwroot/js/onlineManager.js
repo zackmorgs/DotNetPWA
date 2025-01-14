@@ -3,11 +3,13 @@
 
     window.addEventListener('online', function () {
         console.log("online");
-        DotNet.invokeMethodAsync('PWA', 'OnOnlineStatusChanged', true);
+        DotNet.invokeMethodAsync('PWA', 'isOnlineStatusChanged');
+        DotNet.invokeMethodAsync('PWA', 'UpdateSQLDb', indexedDB);
+
     });
 
     window.addEventListener('offline', function () {
         console.log("offline");
-        DotNet.invokeMethodAsync('PWA', 'OnOnlineStatusChanged', false);
+        DotNet.invokeMethodAsync('PWA', 'isNotOnlineStatusChanged');
     });
 });
