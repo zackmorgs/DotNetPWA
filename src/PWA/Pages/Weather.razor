@@ -1,8 +1,11 @@
 ﻿@using Models
+
 @page "/weather"
+
 @inject HttpClient Http
 @inject IIndexedDbService IndexedDb
 @inject IJSRuntime JSRuntime
+
 
 <PageTitle>Weather</PageTitle>
 
@@ -98,7 +101,7 @@
 @code {
     private WeatherForecast[]? forecasts;
     private string? errorMessage;
-    public static bool IsOnline = true;
+    public static bool IsOnline { get; set; } = true;
     public DateTime myDateTime { get; set; } = DateTime.Today;
     public int myTemp { get; set; } = 65;
     public string mySummary { get; set; } = "Warm";
@@ -111,25 +114,15 @@
         // Initialize IndexedDB
         await JSRuntime.InvokeVoidAsync("initializeIndexedDb");
 
-        // Set up online/offline detection
-        await JSRuntime.InvokeVoidAsync("eval", @"
-            window.addEventListener('online', () => {
-                DotNet.invokeMethodAsync('YourAppNamespace', 'OnOnlineStatusChanged', true);
-            });
-            window.addEventListener('offline', () => {
-                DotNet.invokeMethodAsync('YourAppNamespace', 'OnOnlineStatusChanged', false);
-            });
-        ");
-
         await GetForecasts();
     }
 
     [JSInvokable]
-    public static Task OnOnlineStatusChanged(bool isOnline)
+    public static void OnOnlineStatusChanged(bool isOnline)
     {
+        Console.WriteLine("OnOnlineStatusChanged");
         // Update the online status
         IsOnline = isOnline;
-        return Task.CompletedTask;
     }
 
     public async Task GetForecasts()
