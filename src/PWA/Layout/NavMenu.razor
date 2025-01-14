@@ -1,27 +1,54 @@
-﻿<div class="bg-gray-800 text-white">
-    <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-        <a class="text-xl font-bold" href="#">PWA</a>
-        <button 
-            class="text-white focus:outline-none lg:hidden" 
-            @onclick="ToggleNavMenu">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-        </button>
+﻿<div class="bg-gray-800 text-white shadow-lg">
+    <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+            <a class="text-xl font-bold tracking-tight hover:text-blue-400 transition-colors" href="#">
+                PWA
+            </a>
+            <button class="lg:hidden p-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                    @onclick="ToggleNavMenu"
+                    aria-label="Toggle navigation menu">
+                @if (collapseNavMenu)
+                {
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                }
+                else
+                {
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                }
+            </button>
+        </div>
     </div>
 
-    <div class="lg:flex lg:items-center lg:justify-between">
-        <nav class="bg-gray-700 lg:bg-transparent px-4 py-2 lg:px-0 lg:flex lg:space-x-6">
-            <NavLink class="block py-2 lg:inline-block lg:py-0 text-white hover:text-gray-400" href="" Match="NavLinkMatch.All">
-                <span class="inline-block mr-2 bi bi-house-door-fill"></span> Home
-            </NavLink>
-            <NavLink class="block py-2 lg:inline-block lg:py-0 text-white hover:text-gray-400" href="counter">
-                <span class="inline-block mr-2 bi bi-plus-square-fill"></span> Counter
-            </NavLink>
-            <NavLink class="block py-2 lg:inline-block lg:py-0 text-white hover:text-gray-400" href="weather">
-                <span class="inline-block mr-2 bi bi-list-nested"></span> Weather
-            </NavLink>
-        </nav>
+    <div class="@(collapseNavMenu ? "hidden" : "block") lg:block border-t border-gray-700 lg:border-none">
+        <div class="container mx-auto">
+            <nav class="px-4 py-2 lg:py-0 lg:px-4 flex flex-col lg:flex-row lg:items-center lg:space-x-8">
+                <NavLink class="nav-link group"
+                         href=""
+                         Match="NavLinkMatch.All"
+                         ActiveClass="text-blue-400" @onclick="ToggleNavMenu">
+                    <span class="inline-block mr-2 bi bi-house-door-fill transition-transform group-hover:scale-110"></span>
+                    <span>Home</span>
+                </NavLink>
+
+                <NavLink class="nav-link group"
+                         href="counter"
+                         ActiveClass="text-blue-400" @onclick="ToggleNavMenu">
+                    <span class="inline-block mr-2 bi bi-plus-square-fill transition-transform group-hover:scale-110"></span>
+                    <span>Counter</span>
+                </NavLink>
+
+                <NavLink class="nav-link group"
+                         href="weather"
+                         ActiveClass="text-blue-400" @onclick="ToggleNavMenu">
+                    <span class="inline-block mr-2 bi bi-list-nested transition-transform group-hover:scale-110"></span>
+                    <span>Weather</span>
+                </NavLink>
+            </nav>
+        </div>
     </div>
 </div>
 
@@ -31,5 +58,16 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        // Reset mobile menu when navigating
+        // NavigationManager.LocationChanged += (s, e) =>
+        // {
+        //     collapseNavMenu = true;
+        //     StateHasChanged();
+        // };
     }
 }
