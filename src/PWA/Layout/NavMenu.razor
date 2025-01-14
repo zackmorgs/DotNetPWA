@@ -1,4 +1,4 @@
-﻿<div class="bg-gray-800 text-white shadow-lg">
+﻿<div id="nav_main" class="bg-gray-800 text-white shadow-lg lg:flex lg:flex-row lg:items-center sticky">
     <div class="container mx-auto px-4 py-3">
         <div class="flex items-center justify-between">
             <a class="text-xl font-bold tracking-tight hover:text-blue-400 transition-colors" href="#">
@@ -23,28 +23,25 @@
         </div>
     </div>
 
-    <div class="@(collapseNavMenu ? "hidden" : "block") lg:block border-t border-gray-700 lg:border-none">
+    <div id="nav_list_container" class="@(collapseNavMenu ? "hidden" : "block") lg:block border-t border-gray-700 lg:border-none">
         <div class="container mx-auto">
-            <nav class="px-4 py-2 lg:py-0 lg:px-4 flex flex-col lg:flex-row lg:items-center lg:space-x-8">
-                <NavLink class="nav-link group"
+            <nav class="flex flex-col lg:flex-row lg:items-center lg:space-x-8">
+                <NavLink class="mr-0 py-2 px-4 lg:p-4"
                          href=""
                          Match="NavLinkMatch.All"
                          ActiveClass="text-blue-400" @onclick="ToggleNavMenu">
-                    <span class="inline-block mr-2 bi bi-house-door-fill transition-transform group-hover:scale-110"></span>
                     <span>Home</span>
                 </NavLink>
 
-                <NavLink class="nav-link group"
+                <NavLink class="mr-0 p-4"
                          href="counter"
                          ActiveClass="text-blue-400" @onclick="ToggleNavMenu">
-                    <span class="inline-block mr-2 bi bi-plus-square-fill transition-transform group-hover:scale-110"></span>
                     <span>Counter</span>
                 </NavLink>
 
-                <NavLink class="nav-link group"
+                <NavLink class="mr-0 p-4"
                          href="weather"
                          ActiveClass="text-blue-400" @onclick="ToggleNavMenu">
-                    <span class="inline-block mr-2 bi bi-list-nested transition-transform group-hover:scale-110"></span>
                     <span>Weather</span>
                 </NavLink>
             </nav>

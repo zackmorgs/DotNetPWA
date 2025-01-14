@@ -2,11 +2,18 @@
 
 <PageTitle>Counter</PageTitle>
 
-<h1>Counter</h1>
-
-<p role="status">Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<!-- Counter Section -->
+<section class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center">
+    <div class="bg-white shadow-md rounded-lg p-8 text-center">
+        <h1 class="text-3xl font-bold mb-4">Counter</h1>
+        <p role="status" class="text-lg mb-6">Current count: <span class="font-semibold">@currentCount</span></p>
+        <button 
+            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-6 rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-300"
+            @onclick="IncrementCount">
+            Click me
+        </button>
+    </div>
+</section>
 
 @code {
     private int currentCount = 0;

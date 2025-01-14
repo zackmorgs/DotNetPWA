@@ -2,22 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-.nav-link {
-    @apply block py-3 lg:py-4 text-gray-300 hover:text-white transition-colors duration-200 relative;
-}
-
-.nav-link.active {
-    @apply text-blue-400;
-}
-
-.nav-link.active::after {
-    @apply content- [''] absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 transform scale-x-100 transition-transform duration-300;
-}
-
-.nav-link:not(.active)::after {
-    @apply content- [''] absolute bottom-0 left-0 w-full h-0.5 bg-blue-400 transform scale-x-0 transition-transform duration-300;
-}
-
-.nav-link:hover::after {
-    @apply scale-x-100;
+main {
+    /* position:relative;
+    top:64px; */
 }
