@@ -12,7 +12,7 @@ public class WeatherForecastService
     {
         _db = db;
     }
-    public List<string> Summaries = new List<string> { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+
     public async Task<List<WeatherForecast>> GetWeatherForecast()
     {
         return await _db.WeatherForecasts.ToListAsync();
