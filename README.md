@@ -33,8 +33,11 @@ A repository for my future dotnet PWA projects to assist me in a efficient creat
     - `cd ./../..`
 
 ### 3. Development Tutorial
+#### Either
 - Run the npm "watch" dev script:
     - `npm run watch`
+#### or
+- Hit the "Play" button in VisualStudio
 
 This will launch the API server, the PWA server, TailwindCSS's watch script (with css tree-shaking and autoprefixing for vendors), a Webpack bundling service, and quick and efficient css minification with PostCSS/CSSNano plugin.
 
