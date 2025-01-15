@@ -1,5 +1,5 @@
 # DotNetPWA
-A repository for my future dotnet PWA projects to assist me in a boilerplate fashion.
+A repository for my future dotnet PWA projects to assist me in a efficient creation of a dotnet PWA.
 
 ## Features
 - Blazor WASM PWA Client
