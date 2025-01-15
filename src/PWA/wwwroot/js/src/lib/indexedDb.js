@@ -1,7 +1,5 @@
-// Add this to your wwwroot/js/indexedDb.js file
 let db;
 
-// 
 window.initializeIndexedDb = async () => {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open('WeatherDb', 1);
