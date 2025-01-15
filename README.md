@@ -4,10 +4,10 @@ A repository for my future dotnet PWA projects to assist me in a boilerplate fas
 ## Features
 - Blazor WASM PWA Client
 - API Server
-- TailwindCSS support
+- Offical TailwindCSS support
 - Webpack bundling
-- CSSNano minfication
-- Lightweight authorization handling
+- CSSNano CSS minfication
+- Lightweight authorization handling with Identity Framework Core
 - IndexedDb support (in-progress)
 - Online/Offline sync support (in the works..)
 
@@ -20,7 +20,7 @@ A repository for my future dotnet PWA projects to assist me in a boilerplate fas
 - Open a terminal in a folder of your choosing.
 - Clone the repository:
     - `git clone https://github.com/zackmorgs/DotNetPWA.git`
-- Install the dependencies:
+- Install the app's dependencies:
     - `npm install`
     - `dotnet restore`
 
@@ -36,15 +36,17 @@ A repository for my future dotnet PWA projects to assist me in a boilerplate fas
 - Run the npm "watch" dev script:
     - `npm run watch`
 
-This will launch the API server, the PWA server, TailwindCSS's watch script (with css tree-shaking and autoprefixing for vendors), a webpack bundling service, and quick and efficient css minification with postcss/cssnano plugin.
+This will launch the API server, the PWA server, TailwindCSS's watch script (with css tree-shaking and autoprefixing for vendors), a Webpack bundling service, and quick and efficient css minification with PostCSS/CSSNano plugin.
 
 It should pop up a pwa client on your default browser.
 
-### 4. Building
+### 4. Building out the whole thing
 - Run the npm "build" command
     - `npm run build`
 
-This will bundle javacript, efficiently build TailwindCSS, minify the css, and build out the dotnet application to "./dist"
+This will bundle JavaScript, efficiently build TailwindCSS, minify the css, and build out the `dotnet` application to `"./dist"`
+
+If you have errors, they should appear in the terminal.
 
 ## Todo:
 - Identity scaffolding/code
