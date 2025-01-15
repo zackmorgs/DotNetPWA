@@ -20,10 +20,34 @@ builder.Services.AddDbContext<Db>(options =>
 // Identity configuration
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false;
+    // Password settings
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 8;
+    
+    // Lockout settings
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    
+    // User settings
+    options.User.RequireUniqueEmail = true;
 })
 .AddEntityFrameworkStores<Db>()
 .AddDefaultTokenProviders();
+
+// Configure authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+});
+
+// Add authorization
+builder.Services.AddAuthorization();
+
 
 // Register custom services
 builder.Services.AddScoped<WeatherForecastService>();
@@ -47,9 +71,14 @@ if (app.Environment.IsDevelopment())
     //app.UseSwagger();
     //app.UseSwaggerUI();
 }
+app.UseCors("API");
 
 app.UseHttpsRedirection();
-app.UseCors("API");
+
+// Configure the HTTP request pipeline
+app.UseAuthentication();
+app.UseAuthorization();
+
 
 // Endpoints
 app.MapGet("/weatherforecast", async (WeatherForecastService weatherService) =>
