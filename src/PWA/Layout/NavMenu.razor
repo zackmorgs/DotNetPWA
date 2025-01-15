@@ -29,19 +29,19 @@
                 <NavLink class="mr-0 py-2 px-4 lg:p-4"
                          href=""
                          Match="NavLinkMatch.All"
-                         ActiveClass="text-blue-400" @onclick="ToggleNavMenu">
+                         ActiveClass="text-blue-400" @onclick="CloseMenu">
                     <span>Home</span>
                 </NavLink>
 
                 <NavLink class="mr-0 p-4"
                          href="counter"
-                         ActiveClass="text-blue-400" @onclick="ToggleNavMenu">
+                         ActiveClass="text-blue-400" @onclick="CloseMenu">
                     <span>Counter</span>
                 </NavLink>
 
                 <NavLink class="mr-0 p-4"
                          href="weather"
-                         ActiveClass="text-blue-400" @onclick="ToggleNavMenu">
+                         ActiveClass="text-blue-400" @onclick="CloseMenu">
                     <span>Weather</span>
                 </NavLink>
             </nav>
@@ -55,9 +55,14 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
-        StateHasChanged();
+        @* StateHasChanged(); *@
     }
 
+    private void CloseMenu()
+    {
+        collapseNavMenu = true;
+        @* StateHasChanged(); *@
+    }
     protected override void OnInitialized()
     {
         // Reset mobile menu when navigating
