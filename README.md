@@ -41,3 +41,6 @@ This will launch the API server as well as the PWA server. Navigate to the weath
 ### 4. Building
 - Run the npm "build" command
     - `npm run build`
+
+This will bundle javacript, efficiently build TailwindCSS, minify the css, and build out the dotnet application to "./dist"
+
