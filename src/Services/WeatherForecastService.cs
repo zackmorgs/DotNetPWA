@@ -33,4 +33,18 @@ public class WeatherForecastService
             await _db.SaveChangesAsync();
         }
     }
+
+    public async Task SetWeatherForecast(IEnumerable<WeatherForecast> forecasts)
+    {
+    
+        _db.WeatherForecasts.RemoveRange(_db.WeatherForecasts);
+        _db.WeatherForecasts.AddRange(forecasts);
+
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task<Boolean> HasWeatherForecast(WeatherForecast forecast)
+    {
+        return await _db.WeatherForecasts.AnyAsync(f => f.DateTime == forecast.DateTime);
+    }
 }

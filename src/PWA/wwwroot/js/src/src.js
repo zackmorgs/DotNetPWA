@@ -5,6 +5,7 @@
 
 import './lib/onlineManager.js';
 import './lib/indexedDb.js';
+import './lib/syncManager.js';
 
 navigator.serviceWorker.register('service-worker.js');
 

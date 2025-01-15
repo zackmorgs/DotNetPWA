@@ -5,6 +5,7 @@
         console.log("online");
         DotNet.invokeMethodAsync('PWA', 'isOnlineStatusChanged');
         DotNet.invokeMethodAsync('PWA', 'UpdateSQLDb', indexedDB);
+        this.window.syncWeatherForecasts()
 
     });
 

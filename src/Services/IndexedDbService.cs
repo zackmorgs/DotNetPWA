@@ -12,6 +12,7 @@ public interface IIndexedDbService
     Task SaveForecasts(WeatherForecast[] forecasts);
     Task AddForecast(WeatherForecast forecast);
     Task RemoveForecast(WeatherForecast forecast);
+    Task ClearForecasts();
 }
 
 public class IndexedDbService : IIndexedDbService
@@ -48,5 +49,10 @@ public class IndexedDbService : IIndexedDbService
     public async Task RemoveForecast(WeatherForecast forecast)
     {
         await _jsRuntime.InvokeVoidAsync("removeFromIndexedDb", StoreName, forecast);
+    }
+    
+    public async Task ClearForecasts()
+    {
+        await _jsRuntime.InvokeVoidAsync("clearIndexedDb", StoreName);
     }
 }

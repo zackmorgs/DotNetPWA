@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Data;
 using Models;
 using Services;
+using System.Net.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,11 +27,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 8;
-    
+
     // Lockout settings
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
     options.Lockout.MaxFailedAccessAttempts = 5;
-    
+
     // User settings
     options.User.RequireUniqueEmail = true;
 })
@@ -118,6 +119,44 @@ app.MapPost("/weatherforecast", async (int Id, WeatherForecastService weatherSer
     }
 })
 .WithName("RemoveWeatherForecast");
+
+app.MapPut("/weatherforecast", async (List<WeatherForecast> forecasts, WeatherForecastService weatherService) => 
+{
+    try
+    {
+        if (forecasts == null || !forecasts.Any())
+        {
+            throw new Exception("No weather forecasts provided.");
+        }
+        else
+        {
+            foreach (var forecast in forecasts)
+            {
+                // Check if the forecast already exists in the database
+                var hasExistingForecast = await weatherService.HasWeatherForecast(forecast);
+
+                if (hasExistingForecast != null)
+                {
+                    // Update the existing forecast
+                    forecast.DateTime = forecast.DateTime;
+                    forecast.TemperatureC = forecast.TemperatureC;
+                    forecast.Summary = forecast.Summary;
+                }
+                else
+                {
+                    // Add a new forecast if it doesn't exist
+                    await weatherService.AddWeatherForecast(forecast);
+                }
+            }
+        }
+        return Results.Ok("Weather forecasts updated successfully.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex);
+        return Results.Problem("An error occurred while adding the weather forecast.");
+    }
+}).WithName("SetWeatherForecast");
 
 // Run the application
 app.Run();
