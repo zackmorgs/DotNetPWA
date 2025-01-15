@@ -1,9 +1,22 @@
 # DotNetPWA
-A repository for my future dotnet projects to assist me in configuration.
+A repository for my future dotnet PWA projects to assist me in a boilerplate fashion.
 
-## Basic Usage
+## Features
+- Blazor WASM PWA Client
+- API Server
+- TailwindCSS support
+- Webpack bundling
+- CSSNano minfication
+- Lightweight authorization handling
+- IndexedDb support (in-progress)
+- Online/Offline sync support (in the works..)
+
+## Basic Installation/DX
+### Install Global Dependencies
 - Install dotnet 9 via [official source](https://dotnet.microsoft.com/en-us/download). 
 - Install node/npm via [official source](https://nodejs.org/en).
+
+### dotnet/npm dependency installation
 - Open a terminal in a folder of your choosing.
 - Clone the repository:
     - `git clone https://github.com/zackmorgs/DotNetPWA.git`
@@ -16,7 +29,13 @@ A repository for my future dotnet projects to assist me in configuration.
         - `dotnet ef database update --startup-project ./../API;`
 - Return to the projects root folder:
     - `cd ./../..`
+
+### Development Tutorial
 - Run the npm "watch" dev script:
     - `npm run watch`
 
 This will launch the API server as well as the PWA server. Navigate to the weather page to test functionality.
+
+### Building
+- Run the npm "build" command
+    - `npm run build`
