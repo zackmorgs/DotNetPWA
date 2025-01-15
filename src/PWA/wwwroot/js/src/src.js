@@ -3,8 +3,8 @@
 // import './../../service-worker.js';
 // import './../../service-worker.published.js';
 
-import './onlineManager.js';
-import './indexedDb.js';
+import './lib/onlineManager.js';
+import './lib/indexedDb.js';
 
 navigator.serviceWorker.register('service-worker.js');
 
