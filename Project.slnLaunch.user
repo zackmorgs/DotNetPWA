@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "VisualStudioRunner",
+    "Projects": [
+      {
+        "Path": "src\\API\\API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "src\\PWA\\PWA.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]
