@@ -44,3 +44,13 @@ This will launch the API server as well as the PWA server. Navigate to the weath
 
 This will bundle javacript, efficiently build TailwindCSS, minify the css, and build out the dotnet application to "./dist"
 
+## Todo:
+- Identity scaffolding/code
+    - Setup role-based authentication
+    - Allow users to register
+    - Allow users to login
+    - Seed an "Admin" user safely
+- Offline Sync Support
+    - Setup offline sync support to sync IndexedDb with MS SQL Server correctly.
+    - Integrate [Background Sync API](https://developer.mozilla.org/en-US/docs/Web/API/Background_Synchronization_API) with service workers.
+    - Create custom framework for the above for rock-solid DX, consistent performance
