@@ -14,7 +14,7 @@
     "api:watch": "dotnet watch --project ./src/API/API.csproj",
     "pwa:watch": "dotnet watch --project ./src/PWA/PWA.csproj",
     "tailwind:build": "npx tailwindcss -i ./src/PWA/wwwroot/styles/css/src.css -o ./src/PWA/wwwroot/styles/css/dist.css",
-    "tailwind:watch": "npx tailwindcss -i ./src/PWA/wwwroot/styles/css/src.postcscss -o ./src/PWA/wwwroot/styles/css/dist.css --watch"
+    "tailwind:watch": "npx tailwindcss -i ./src/PWA/wwwroot/styles/css/src.css -o ./src/PWA/wwwroot/styles/css/dist.css --watch"
   },
   "keywords": [],
   "author": "",
