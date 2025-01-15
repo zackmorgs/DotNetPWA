@@ -3,7 +3,9 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# dont include distribution code in repo
 /dist
+/distwwwroot
 
 # dotenv files
 .env
