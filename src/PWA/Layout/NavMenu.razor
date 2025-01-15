@@ -1,74 +1,84 @@
 ﻿@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
-
 @attribute [Authorize]
-<CascadingAuthenticationState>
-    <div id="nav_main" class="bg-gray-800 text-white shadow-lg lg:flex lg:flex-row lg:items-center sticky">
-        <div class="container mx-auto px-4 py-3">
-            <div class="flex items-center justify-between">
-                <a class="text-xl font-bold tracking-tight hover:text-blue-400 transition-colors" href="#">
-                    PWA
-                </a>
-                <button
-                    class="lg:hidden p-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                    @onclick="ToggleNavMenu" aria-label="Toggle navigation menu">
-                    @if (collapseNavMenu)
-                    {
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16" />
-                        </svg>
-                    }
-                    else
-                    {
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    }
-                </button>
-            </div>
-        </div>
-
-
-        <div id="nav_list_container"
-            class="@(collapseNavMenu ? "hidden" : "block") lg:block border-t border-gray-700 lg:border-none">
-            <div class="container mx-auto">
-                <nav class="flex flex-col lg:flex-row lg:items-center lg:space-x-8">
-                    <AuthorizeView>
-                        <Authorized>
-                            <NavLink class="mr-0 py-2 px-4 lg:p-4" href="" Match="NavLinkMatch.All"
-                                ActiveClass="text-blue-400" @onclick="CloseMenu">
-                                <span>Home</span>
-                            </NavLink>
-
-                            <NavLink class="mr-0 p-4" href="counter" ActiveClass="text-blue-400" @onclick="CloseMenu">
-                                <span>Counter</span>
-                            </NavLink>
-
-                            <NavLink class="mr-0 p-4" href="weather" ActiveClass="text-blue-400" @onclick="CloseMenu">
-                                <span>Weather</span>
-                            </NavLink>
-                        </Authorized>
-                        <NotAuthorized>
-                            <NavLink class="mr-0 p-4" href="/register" ActiveClass="text-blue-400" @onclick="CloseMenu">
-                                <span>Register</span>
-                            </NavLink>
-                            <NavLink class="mr-0 p-4" href="/login" ActiveClass="text-blue-400" @onclick="CloseMenu">
-                                <span>Login</span>
-                            </NavLink>
-                            <NavLink class="mr-0 p-4" href="/forgot-password" ActiveClass="text-blue-400" @onclick="CloseMenu">
-                                <span>Forgot Password</span>
-                            </NavLink>
-                        </NotAuthorized>
-                    </AuthorizeView>
-                </nav>
-            </div>
+@*<CascadingAuthenticationState> *@
+<div id="nav_main" class="bg-gray-800 text-white shadow-lg lg:flex lg:flex-row lg:items-center sticky">
+    <div class="container mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+            <a class="text-xl font-bold tracking-tight hover:text-blue-400 transition-colors" href="#">
+                PWA
+            </a>
+            <button
+                class="lg:hidden p-2 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                @onclick="ToggleNavMenu" aria-label="Toggle navigation menu">
+                @if (collapseNavMenu)
+                {
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                }
+                else
+                {
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                }
+            </button>
         </div>
     </div>
-</CascadingAuthenticationState>
+
+
+    <div id="nav_list_container"
+        class="@(collapseNavMenu ? "hidden" : "block") lg:block border-t border-gray-700 lg:border-none">
+        <div class="container mx-auto">
+            <nav class="flex flex-col lg:flex-row lg:items-center lg:space-x-8">
+                <NavLink class="mr-0 py-2 px-4 lg:p-4" href="" Match="NavLinkMatch.All" ActiveClass="text-blue-400"
+                    @onclick="CloseMenu">
+                    <span>Home</span>
+                </NavLink>
+
+                <NavLink class="mr-0 p-4" href="counter" ActiveClass="text-blue-400" @onclick="CloseMenu">
+                    <span>Counter</span>
+                </NavLink>
+
+                <NavLink class="mr-0 p-4" href="weather" ActiveClass="text-blue-400" @onclick="CloseMenu">
+                    <span>Weather</span>
+                </NavLink>
+                @* <AuthorizeView>
+                    <Authorized>
+                        <NavLink class="mr-0 py-2 px-4 lg:p-4" href="" Match="NavLinkMatch.All"
+                            ActiveClass="text-blue-400" @onclick="CloseMenu">
+                            <span>Home</span>
+                        </NavLink>
+
+                        <NavLink class="mr-0 p-4" href="counter" ActiveClass="text-blue-400" @onclick="CloseMenu">
+                            <span>Counter</span>
+                        </NavLink>
+
+                        <NavLink class="mr-0 p-4" href="weather" ActiveClass="text-blue-400" @onclick="CloseMenu">
+                            <span>Weather</span>
+                        </NavLink>
+                    </Authorized>
+                    <NotAuthorized>
+                        <NavLink class="mr-0 p-4" href="/register" ActiveClass="text-blue-400" @onclick="CloseMenu">
+                            <span>Register</span>
+                        </NavLink>
+                        <NavLink class="mr-0 p-4" href="/login" ActiveClass="text-blue-400" @onclick="CloseMenu">
+                            <span>Login</span>
+                        </NavLink>
+                        <NavLink class="mr-0 p-4" href="/forgot-password" ActiveClass="text-blue-400"
+                            @onclick="CloseMenu">
+                            <span>Forgot Password</span>
+                        </NavLink>
+                    </NotAuthorized>
+                </AuthorizeView> *@
+            </nav>
+        </div>
+    </div>
+</div>
+@* </CascadingAuthenticationState> *@
 
 
 @code {
