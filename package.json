@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npm-run-all -s tailwind:build postcss:minify webpack:build dotnet:build",
+    "build:frontend" : "npm-run-all -s tailwind:build postcss:build webpack:build",
     "watch": "npm-run-all -p dotnet:watch tailwind:watch webpack:watch postcss:watch",
     "webpack:watch": "webpack watch",
     "webpack:build" : "webpack build",

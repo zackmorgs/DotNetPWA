@@ -1,6 +1,7 @@
 [
   {
-    "Name": "VisualStudioRunner",
+    "Name": "Custom Launcher",
+    "Version" : "1.0",
     "Projects": [
       {
         "Path": "src\\API\\API.csproj",

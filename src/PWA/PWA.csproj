@@ -19,9 +19,13 @@
     <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>
 
+
   <ItemGroup>
     <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>
 
+  <Target Name="RunNpmScript" BeforeTargets="Build">
+    <Exec Command="npm run build:frontend" WorkingDirectory=".\..\.." />
+  </Target>
 </Project>
