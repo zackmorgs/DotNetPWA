@@ -11,6 +11,7 @@ public interface IIndexedDbService
     Task<List<WeatherForecast>> GetForecasts();
     Task SaveForecasts(WeatherForecast[] forecasts);
     Task AddForecast(WeatherForecast forecast);
+    Task RemoveForecast(WeatherForecast forecast);
 }
 
 public class IndexedDbService : IIndexedDbService
@@ -42,5 +43,10 @@ public class IndexedDbService : IIndexedDbService
     public async Task AddForecast(WeatherForecast forecast)
     {
         await _jsRuntime.InvokeVoidAsync("addToIndexedDb", StoreName, forecast);
+    }
+
+    public async Task RemoveForecast(WeatherForecast forecast)
+    {
+        await _jsRuntime.InvokeVoidAsync("removeFromIndexedDb", StoreName, forecast);
     }
 }

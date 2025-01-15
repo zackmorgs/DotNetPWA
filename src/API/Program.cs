@@ -104,5 +104,20 @@ app.MapPost("/weatherforecast", async (WeatherForecast forecast, WeatherForecast
 })
 .WithName("AddWeatherForecast");
 
+app.MapPost("/weatherforecast", async (int Id, WeatherForecastService weatherService) =>
+{
+    try
+    {
+        await weatherService.RemoveWeatherForecast(Id);
+        return Results.Ok("Weather forecast added successfully.");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine(ex);
+        return Results.Problem("An error occurred while adding the weather forecast.");
+    }
+})
+.WithName("RemoveWeatherForecast");
+
 // Run the application
 app.Run();

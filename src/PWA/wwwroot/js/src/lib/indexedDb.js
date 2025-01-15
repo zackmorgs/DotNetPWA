@@ -60,3 +60,11 @@ window.getFromIndexedDb = async (storeName) => {
         request.onerror = () => reject(request.error);
     });
 };
+
+window.removeFromIndexedDb = async (storeName) => {
+    return new Promise((resolve, reject) => {
+        const transaction = db.transaction(storeName, 'readwrite');
+        const store = transaction.objectStore(storeName);
+        const request = store.remove(data);
+    });
+};
