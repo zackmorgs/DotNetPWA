@@ -8,5 +8,5 @@ import './lib/indexedDb.js';
 
 navigator.serviceWorker.register('service-worker.js');
 
-console.log('Hello from src->dist.js');
+console.log('Hello from src -> dist.js');
 
