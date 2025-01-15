@@ -36,7 +36,9 @@ A repository for my future dotnet PWA projects to assist me in a boilerplate fas
 - Run the npm "watch" dev script:
     - `npm run watch`
 
-This will launch the API server as well as the PWA server. Navigate to the weather page to test functionality.
+This will launch the API server, the PWA server, TailwindCSS's watch script (with css tree-shaking and autoprefixing for vendors), a webpack bundling service, and quick and efficient css minification with postcss/cssnano plugin.
+
+It should pop up a pwa client on your default browser.
 
 ### 4. Building
 - Run the npm "build" command
