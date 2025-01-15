@@ -16,13 +16,15 @@ A repository for my future dotnet PWA projects to assist me in a boilerplate fas
 - Install dotnet 9 via [official source](https://dotnet.microsoft.com/en-us/download). 
 - Install node/npm via [official source](https://nodejs.org/en).
 
-### dotnet/npm dependency installation
+### 1. dotnet/npm dependency installation
 - Open a terminal in a folder of your choosing.
 - Clone the repository:
     - `git clone https://github.com/zackmorgs/DotNetPWA.git`
 - Install the dependencies:
     - `npm install`
     - `dotnet restore`
+
+### 2. Microsoft SQL Server Initiation
 - Instantiate the database by running a migration
     - `cd ./src/Data/; dotnet ef migrations add InitialCreate --startup-project ./../API;`
     - When it finishes: 
@@ -30,12 +32,12 @@ A repository for my future dotnet PWA projects to assist me in a boilerplate fas
 - Return to the projects root folder:
     - `cd ./../..`
 
-### Development Tutorial
+### 3. Development Tutorial
 - Run the npm "watch" dev script:
     - `npm run watch`
 
 This will launch the API server as well as the PWA server. Navigate to the weather page to test functionality.
 
-### Building
+### 4. Building
 - Run the npm "build" command
     - `npm run build`
