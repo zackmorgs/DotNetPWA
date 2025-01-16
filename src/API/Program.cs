@@ -1,56 +1,43 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Components.WebAssembly;
+
+using System.Net.Http.Json;
 
 using Data;
 using Models;
 using Services;
-using System.Net.Http.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Connection String
+// Get MS SQL connection string
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-// Add services to the container.
+// Add MS SQL service to the container.
 builder.Services.AddDbContext<Db>(options =>
     options.UseSqlServer(connectionString));
 
-// Identity configuration
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-{
-    // Password settings
-    options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequireUppercase = true;
-    options.Password.RequiredLength = 8;
+// add db error viewing.
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-    // Lockout settings
-    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    options.Lockout.MaxFailedAccessAttempts = 5;
-
-    // User settings
-    options.User.RequireUniqueEmail = true;
-})
-.AddEntityFrameworkStores<Db>()
-.AddDefaultTokenProviders();
+// Specify which database to use for Identity.
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<Db>();
 
 // Configure authentication
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
-    options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-});
+builder.Services.AddAuthentication()
+    .AddIdentityServerJwt();
 
 // Add authorization
-builder.Services.AddAuthorization();
+// builder.Services.AddAuthorization();
 
 
-// Register custom services
+// Register Custom Services
 builder.Services.AddScoped<WeatherForecastService>();
 
 // OpenAPI (Swagger)
@@ -76,10 +63,31 @@ app.UseCors("API");
 
 app.UseHttpsRedirection();
 
-// Configure the HTTP request pipeline
-app.UseAuthentication();
-app.UseAuthorization();
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    // app.UseWebAssemblyDebugging();
+}
+else
+{
+    app.UseExceptionHandler("/Error");
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
 
+app.UseHttpsRedirection();
+
+// app.UseBlazorFrameworkFiles();
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.UseIdentityServer();
+app.UseAuthorization();
+app.UseAuthentication();
+
+app.MapRazorPages();
+app.MapControllers();
 
 // Endpoints
 app.MapGet("/weatherforecast", async (WeatherForecastService weatherService) =>

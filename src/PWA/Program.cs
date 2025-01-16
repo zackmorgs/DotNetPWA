@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 
 using PWA;
 using Services;
+using PWA.Handlers;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -16,6 +17,8 @@ builder.Services.AddApiAuthorization();
 
 // Add authentication state provider
 builder.Services.AddScoped<AuthenticationStateProvider, ApiAuthenticationStateProvider>();
+
+builder.Services.AddScoped<CookieHandler>();
 
 // Add HttpClient factory
 builder.Services.AddHttpClient();

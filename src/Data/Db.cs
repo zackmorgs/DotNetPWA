@@ -1,19 +1,20 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.Extensions.Options;
+
+using Duende.IdentityServer.EntityFramework.Options;
+
 using Models;
 
 namespace Data
 {
-    public class Db : IdentityDbContext<ApplicationUser>
+    public class Db : ApiAuthorizationDbContext<ApplicationUser>
     {
-        public Db(DbContextOptions<Db> options) : base(options)
+        public Db(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
         }
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
-            // Add any custom model configurations here
-        }
-        public DbSet<WeatherForecast> WeatherForecasts { get; set; }
+
+        public DbSet<WeatherForecast> WeatherForecasts { get; set; } = null!;
     }
 }
