@@ -6,6 +6,7 @@ A repository for my future dotnet PWA projects to assist me in a efficient creat
 - API Server
 - Offical TailwindCSS support
 - Webpack bundling
+- Js minification with Terser
 - CSSNano CSS minfication
 - Lightweight authorization handling with Identity Framework Core
 - IndexedDb support (in-progress)
