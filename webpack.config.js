@@ -16,7 +16,7 @@ module.exports = {
       new TerserPlugin({
         terserOptions: {
           compress: true, // Enable compression
-          mangle: true,   // Enable name mangling
+          mangle: false  // Enable name mangling
         },
       }),
     ],
